@@ -1,0 +1,589 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a simple API"
+  version: "1.0.0"
+  title: "Simple Inventory API"
+  contact:
+    email: "you@your-company.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/lordone/Livraria/1.0.0"
+schemes:
+- "https"
+paths:
+  /livros:
+    get:
+      description: "Retorna uma lista de livros avaliados"
+      operationId: "livrosGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "skip"
+        in: "query"
+        description: "número de livros iniciais para serem ignorados no resultado"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "máximo de livros para retornar"
+        required: false
+        type: "integer"
+        maximum: 30
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "retornou a lista de livros com sucesso"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Livro"
+        400:
+          description: "Requisição inválida"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Adiciona um livro no sistema"
+      operationId: "livrosPOST"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "inventoryItem"
+        description: "Inventory item to add"
+        required: false
+        schema:
+          $ref: "#/definitions/Livro"
+      responses:
+        201:
+          description: "livro adicionado"
+        400:
+          description: "invalid input, object invalid"
+        409:
+          description: "an existing item already exists"
+      x-swagger-router-controller: "Default"
+  /livros/{isbn}:
+    get:
+      description: "Retorna um livro pelo isbn"
+      operationId: "livrosIsbnGET"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "isbn"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "retornou o livro buscado"
+          schema:
+            $ref: "#/definitions/Livro"
+        400:
+          description: "Livro não existe"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "Deleta um livro pelo isbn"
+      operationId: "livrosIsbnDELETE"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "isbn"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "livro deletado"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+        400:
+          description: "Livro não existe"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+  /livros/generos/{idGenero}:
+    get:
+      description: "Retorna os livro de um genero"
+      operationId: "livrosGenerosIdGeneroGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idGenero"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "skip"
+        in: "query"
+        description: "número de livros iniciais para serem ignorados no resultado"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "máximo de livros para retornar"
+        required: false
+        type: "integer"
+        maximum: 30
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "retornou a lista de livros de um genero com sucesso"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Livro"
+        400:
+          description: "Requisição inválida"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+  /livros/idiomas/{idIdioma}:
+    get:
+      description: "Retorna os livro de um idioma"
+      operationId: "livrosIdiomasIdIdiomaGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idIdioma"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "skip"
+        in: "query"
+        description: "número de livros iniciais para serem ignorados no resultado"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "máximo de livros para retornar"
+        required: false
+        type: "integer"
+        maximum: 30
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "retornou a lista de livros de um idioma com sucesso"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Livro"
+        400:
+          description: "Requisição inválida"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+  /livros/promocoes:
+    get:
+      description: "Retorna os livro com preços de promoção"
+      operationId: "livrosPromocoesGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "skip"
+        in: "query"
+        description: "número de livros iniciais para serem ignorados no resultado"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "máximo de livros para retornar"
+        required: false
+        type: "integer"
+        maximum: 30
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "retornou a lista de livros com promoção com sucesso"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Livro"
+        400:
+          description: "Requisição inválida"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+  /Autores:
+    get:
+      description: "Retorna uma lista de autores"
+      operationId: "autoresGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "skip"
+        in: "query"
+        description: "número de autores iniciais para serem ignorados no resultado"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "máximo de autores para retornar"
+        required: false
+        type: "integer"
+        maximum: 30
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "retornou a lista de autores com sucesso"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Autor"
+        400:
+          description: "Requisição inválida"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Adiciona um autor no sistema"
+      operationId: "autoresPOST"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "inventoryItem"
+        description: "Inventory item to add"
+        required: false
+        schema:
+          $ref: "#/definitions/Autor"
+      responses:
+        201:
+          description: "autor adicionado"
+        400:
+          description: "invalid input, object invalid"
+        409:
+          description: "an existing item already exists"
+      x-swagger-router-controller: "Default"
+  /Autores/{id}:
+    get:
+      description: "Retorna um autor pelo id"
+      operationId: "autoresIdGET"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "retornou o autor buscado"
+          schema:
+            $ref: "#/definitions/Autor"
+        400:
+          description: "Autor não existe"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "Deleta um autor pelo id"
+      operationId: "autoresIdDELETE"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "autor deletado"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+        400:
+          description: "Autor não existe"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+  /Generos:
+    get:
+      description: "Retorna uma lista de generos"
+      operationId: "generosGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "skip"
+        in: "query"
+        description: "número de generos iniciais para serem ignorados no resultado"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "máximo de generos para retornar"
+        required: false
+        type: "integer"
+        maximum: 30
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "retornou a lista de generos com sucesso"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Genero"
+        400:
+          description: "Requisição inválida"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+    post:
+      description: "Adiciona um genero no sistema"
+      operationId: "generosPOST"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "inventoryItem"
+        description: "Inventory item to add"
+        required: false
+        schema:
+          $ref: "#/definitions/Genero"
+      responses:
+        201:
+          description: "genero adicionado"
+        400:
+          description: "invalid input, object invalid"
+        409:
+          description: "an existing item already exists"
+      x-swagger-router-controller: "Default"
+  /Generos/{id}:
+    get:
+      description: "Retorna um genero pelo id"
+      operationId: "generosIdGET"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "retornou o genero buscado"
+          schema:
+            $ref: "#/definitions/Genero"
+        400:
+          description: "Genero não existe"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+    delete:
+      description: "Deleta um genero pelo id"
+      operationId: "generosIdDELETE"
+      produces:
+      - "application/json"
+      - "application/xml"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "genero deletado"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+        400:
+          description: "Genero não existe"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+      x-swagger-router-controller: "Default"
+definitions:
+  Livro:
+    type: "object"
+    required:
+    - "author"
+    - "description"
+    - "genre"
+    - "isbn"
+    - "name"
+    - "price"
+    - "releaseDate"
+    properties:
+      isbn:
+        type: "string"
+        format: "uuid"
+        example: "9780261103252"
+      name:
+        type: "string"
+        example: "The Lord of the Rings"
+      releaseDate:
+        type: "string"
+        format: "date"
+        example: "2017-04-17T00:00:00.000Z"
+      price:
+        type: "number"
+        example: 99.9
+      description:
+        type: "string"
+        example: "Numa cidadezinha indolente do Condado, um jovem hobbit é encarregado\
+          \ de uma imensa tarefa. Deve empreender uma perigosa viagem através da Terra-mé\
+          dia até as Fendas da Perdição, e lá destruir o Anel do Poder - a única coisa\
+          \ que impede o domínio maléfico do Senhor do Escuro."
+      author:
+        $ref: "#/definitions/Autor"
+      genre:
+        $ref: "#/definitions/Genero"
+    example:
+      releaseDate: "2017-04-17T00:00:00.000Z"
+      price: 99.9
+      author:
+        birthday: "1892-01-03T00:00:00.000Z"
+        nationality: "British"
+        name: "J. R. R. Tolkien"
+        id: 1
+      isbn: "9780261103252"
+      name: "The Lord of the Rings"
+      genre:
+        name: "Fantasia"
+        description: "Fantasia é um gênero da ficção em que se usa geralmente fenô\
+          menos sobrenaturais, mágicos e outros como um elemento primário do enredo,\
+          \ tema ou configuração."
+        id: 1
+      description: "Numa cidadezinha indolente do Condado, um jovem hobbit é encarregado\
+        \ de uma imensa tarefa. Deve empreender uma perigosa viagem através da Terra-mé\
+        dia até as Fendas da Perdição, e lá destruir o Anel do Poder - a única coisa\
+        \ que impede o domínio maléfico do Senhor do Escuro."
+  Autor:
+    type: "object"
+    required:
+    - "birthday"
+    - "id"
+    - "name"
+    - "nationality"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 1
+      name:
+        type: "string"
+        example: "J. R. R. Tolkien"
+      birthday:
+        type: "string"
+        format: "date"
+        example: "1892-01-03T00:00:00.000Z"
+      nationality:
+        type: "string"
+        example: "British"
+    example:
+      birthday: "1892-01-03T00:00:00.000Z"
+      nationality: "British"
+      name: "J. R. R. Tolkien"
+      id: 1
+  Genero:
+    type: "object"
+    required:
+    - "description"
+    - "id"
+    - "name"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 1
+      name:
+        type: "string"
+        example: "Fantasia"
+      description:
+        type: "string"
+        example: "Fantasia é um gênero da ficção em que se usa geralmente fenômenos\
+          \ sobrenaturais, mágicos e outros como um elemento primário do enredo, tema\
+          \ ou configuração."
+    example:
+      name: "Fantasia"
+      description: "Fantasia é um gênero da ficção em que se usa geralmente fenômenos\
+        \ sobrenaturais, mágicos e outros como um elemento primário do enredo, tema\
+        \ ou configuração."
+      id: 1
+  Idioma:
+    type: "object"
+    required:
+    - "id"
+    - "name"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 1
+      name:
+        type: "string"
+        example: "Inglês"
+  inline_response_400:
+    properties:
+      message:
+        type: "string"
+    example:
+      message: "message"
